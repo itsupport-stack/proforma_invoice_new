@@ -25,7 +25,7 @@
             transition: all 0.2s;
         }
         input:hover, select:hover, input:focus, select:focus { border-color: #0a5e5e; background-color: #f0f8ff; }
-       
+
         /* Hide default dropdown arrow */
         select {
             -webkit-appearance: none;
@@ -36,7 +36,7 @@
             background-position: right 0.5rem center;
             background-size: 1.5em 1.5em;
         }
-       
+
         /* Message box styling */
         .message-box {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
@@ -48,7 +48,7 @@
             0%, 100% { opacity: 0; transform: translateX(-50%) scale(0.9); }
             10%, 90% { opacity: 1; transform: translateX(-50%) scale(1); }
         }
-       
+
         /* A4 Paper Optimization for printing */
         .invoice-container {
             width: 210mm; /* A4 width */
@@ -96,7 +96,7 @@
             .print-hide-if-empty.hidden-for-print { display: none !important; }
             [contenteditable="true"], input, select { border: none !important; background-color: transparent !important; padding: 0; }
             .delete-item-btn { display: none; }
-           
+
             /* Hide dropdown arrows in print */
             select {
                 -webkit-appearance: none;
@@ -110,10 +110,10 @@
             /* Keep table header on every page */
             table { page-break-after: auto; }
             thead { display: table-header-group; }
-           
+
             /* Prevent rows and footer from splitting across pages */
             tr, tfoot, .footer-content { page-break-inside: avoid; }
-           
+
             /* Fix QR code print size */
             #qrcode { display: block !important; }
             #qrcode img {
@@ -358,7 +358,7 @@
             { name: "Odisha", code: "21" }, { name: "Punjab", code: "03" }, { name: "Rajasthan", code: "08" },
             { name: "Sikkim", code: "11" }, { name: "Tamil Nadu", code: "33" }, { name: "Telangana", code: "36" },
             { name: "Tripura", code: "16" }, { name: "Uttar Pradesh", code: "09" }, { name: "Uttarakhand", code: "05" },
-            { name: "West Bengal", code: "19" }, { name: "Andaman and Nicobar Islands", code: "35" }, { name:g: "Chandigarh", code: "04" },
+            { name: "West Bengal", code: "19" }, { name: "Andaman and Nicobar Islands", code: "35" }, { name: "Chandigarh", code: "04" },
             { name: "Dadra and Nagar Haveli and Daman and Diu", code: "26" }, { name: "Delhi", code: "07" },
             { name: "Jammu and Kashmir", code: "01" }, { name: "Ladakh", code: "38" }, { name: "Lakshadweep", code: "31" },
             { name: "Puducherry", code: "34" }
