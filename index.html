@@ -271,7 +271,32 @@
                     </tr>
                 </thead>
                 <tbody id="invoiceItems">
-                    </tbody>
+                    <tr>
+                        <td class="py-2 px-2" style="width: 6%;">1</td>
+                        <td class="py-2 px-2" style="width: 30%;">
+                            <select class="product-select w-full p-1 border rounded" aria-label="Product Particulars">
+                                <option value="">Select a Product</option>
+                                <option value="12_6_4">12mm x 6ft x 4ft</option>
+                                <option value="15_6_4">15mm x 6ft x 4ft</option>
+                                <option value="18_6_4">18mm x 6ft x 4ft</option>
+                                <option value="12_7_4">12mm x 7ft x 4ft</option>
+                                <option value="15_7_4">15mm x 7ft x 4ft</option>
+                                <option value="18_7_4">18mm x 7ft x 4ft</option>
+                                <option value="12_8_4">12mm x 8ft x 4ft</option>
+                                <option value="15_8_4">15mm x 8ft x 4ft</option>
+                                <option value="18_8_4">18mm x 8ft x 4ft</option>
+                            </select>
+                        </td>
+                        <td class="py-2 px-2" style="width: 8%;"><input type="number" class="w-full p-1 item-thickness" value="0" min="0" disabled></td>
+                        <td class="py-2 px-2" style="width: 7%;"><input type="number" class="w-full p-1 item-length" value="0" min="0" disabled></td>
+                        <td class="py-2 px-2" style="width: 7%;"><input type="number" class="w-full p-1 item-breadth" value="0" min="0" disabled></td>
+                        <td class="py-2 px-2" style="width: 9%;"><input type="number" class="w-full p-1 item-quantity" value="1" min="1"></td>
+                        <td class="py-2 px-2" style="width: 10%;"><input type="text" class="w-full p-1 item-sqft" value="0" disabled></td>
+                        <td class="py-2 px-2" style="width: 10%;"><input type="number" class="w-full p-1 item-rate" value="0" min="0"></td>
+                        <td class="py-2 px-2 text-right font-semibold item-amount">₹0.00</td>
+                        <td class="py-2 px-2 no-print text-center"><button class="delete-item-btn text-red-500 hover:text-red-700" aria-label="Delete item"><svg class="w-5 h-5 inline-block" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm6 0a1 1 0 011 1v6a1 1 0 11-2 0V9a1 1 0 011-1z" clip-rule="evenodd"></path></svg></button></td>
+                    </tr>
+                </tbody>
                 <tfoot>
                     <tr class="no-print">
                         <td colspan="10" class="pt-4 pb-2 text-right add-remove-buttons">
@@ -460,9 +485,9 @@
             let productItemCounter = 0;
             let transportationItemCounter = 0;
 
-            const updateItemSerialNumbers = (tableBody, counterStart = 0) => {
+            const updateItemSerialNumbers = (tableBody) => {
                 const rows = tableBody.querySelectorAll('tr');
-                let counter = counterStart;
+                let counter = 0;
                 rows.forEach((row) => {
                     counter++;
                     row.querySelector('td:first-child').textContent = counter;
@@ -470,46 +495,72 @@
                 return counter;
             };
 
-            const createItemRow = (serialNumber, type = 'product') => {
+            const createTransportationItemRow = (serialNumber) => {
                 const row = document.createElement('tr');
                 row.classList.add('hover:bg-gray-100');
-                if (type === 'product') {
-                    row.innerHTML = `
-                        <td class="py-2 px-2">${serialNumber}</td>
-                        <td class="py-2 px-2"><textarea class="w-full p-1 border rounded resize-none" rows="1" aria-label="Particulars"></textarea></td>
-                        <td class="py-2 px-2"><input type="number" class="w-full p-1 border rounded item-thickness" value="" min="0"></td>
-                        <td class="py-2 px-2"><input type="number" class="w-full p-1 border rounded item-length" value="" min="0"></td>
-                        <td class="py-2 px-2"><input type="number" class="w-full p-1 border rounded item-breadth" value="" min="0"></td>
-                        <td class="py-2 px-2"><input type="number" class="w-full p-1 border rounded item-quantity" value="1" min="1"></td>
-                        <td class="py-2 px-2"><input type="text" class="w-full p-1 border rounded item-sqft" value="0" disabled></td>
-                        <td class="py-2 px-2"><input type="number" class="w-full p-1 border rounded item-rate" value="0" min="0"></td>
-                        <td class="py-2 px-2 text-right font-semibold item-amount">₹0.00</td>
-                        <td class="py-2 px-2 no-print text-center"><button class="delete-item-btn text-red-500 hover:text-red-700" aria-label="Delete item"><svg class="w-5 h-5 inline-block" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm6 0a1 1 0 011 1v6a1 1 0 11-2 0V9a1 1 0 011-1z" clip-rule="evenodd"></path></svg></button></td>
-                    `;
-                } else if (type === 'transportation') {
-                    row.innerHTML = `
-                        <td class="py-2 px-2">${serialNumber}</td>
-                        <td class="py-2 px-2"><textarea class="w-full p-1 border rounded resize-none" rows="1" aria-label="Particulars">Transportation to <span contenteditable="true">Destination</span></textarea></td>
-                        <td class="py-2 px-2"><input type="number" class="w-full p-1 border rounded item-distance" value="" min="0"></td>
-                        <td class="py-2 px-2"><input type="number" class="w-full p-1 border rounded item-weight" value="" min="0"></td>
-                        <td class="py-2 px-2"><input type="number" class="w-full p-1 border rounded item-rate-tonne" value="0" min="0"></td>
-                        <td class="py-2 px-2 text-right font-semibold item-amount">₹0.00</td>
-                        <td class="py-2 px-2 no-print text-center"><button class="delete-item-btn text-red-500 hover:text-red-700" aria-label="Delete item"><svg class="w-5 h-5 inline-block" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm6 0a1 1 0 011 1v6a1 1 0 11-2 0V9a1 1 0 011-1z" clip-rule="evenodd"></path></svg></button></td>
-                    `;
-                }
+                row.innerHTML = `
+                    <td class="py-2 px-2">${serialNumber}</td>
+                    <td class="py-2 px-2"><textarea class="w-full p-1 border rounded resize-none" rows="1" aria-label="Particulars">Transportation to <span contenteditable="true">Destination</span></textarea></td>
+                    <td class="py-2 px-2"><input type="number" class="w-full p-1 border rounded item-distance" value="" min="0"></td>
+                    <td class="py-2 px-2"><input type="number" class="w-full p-1 border rounded item-weight" value="" min="0"></td>
+                    <td class="py-2 px-2"><input type="number" class="w-full p-1 border rounded item-rate-tonne" value="0" min="0"></td>
+                    <td class="py-2 px-2 text-right font-semibold item-amount">₹0.00</td>
+                    <td class="py-2 px-2 no-print text-center"><button class="delete-item-btn text-red-500 hover:text-red-700" aria-label="Delete item"><svg class="w-5 h-5 inline-block" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm6 0a1 1 0 011 1v6a1 1 0 11-2 0V9a1 1 0 011-1z" clip-rule="evenodd"></path></svg></button></td>
+                `;
+                return row;
+            };
+
+            const createProductItemRow = (serialNumber) => {
+                const row = document.createElement('tr');
+                row.classList.add('hover:bg-gray-100');
+                row.innerHTML = `
+                    <td class="py-2 px-2">${serialNumber}</td>
+                    <td class="py-2 px-2">
+                        <select class="product-select w-full p-1 border rounded" aria-label="Product Particulars">
+                            <option value="">Select a Product</option>
+                            <option value="12_6_4">12mm x 6ft x 4ft</option>
+                            <option value="15_6_4">15mm x 6ft x 4ft</option>
+                            <option value="18_6_4">18mm x 6ft x 4ft</option>
+                            <option value="12_7_4">12mm x 7ft x 4ft</option>
+                            <option value="15_7_4">15mm x 7ft x 4ft</option>
+                            <option value="18_7_4">18mm x 7ft x 4ft</option>
+                            <option value="12_8_4">12mm x 8ft x 4ft</option>
+                            <option value="15_8_4">15mm x 8ft x 4ft</option>
+                            <option value="18_8_4">18mm x 8ft x 4ft</option>
+                        </select>
+                    </td>
+                    <td class="py-2 px-2"><input type="number" class="w-full p-1 border rounded item-thickness" value="0" min="0" disabled></td>
+                    <td class="py-2 px-2"><input type="number" class="w-full p-1 border rounded item-length" value="0" min="0" disabled></td>
+                    <td class="py-2 px-2"><input type="number" class="w-full p-1 border rounded item-breadth" value="0" min="0" disabled></td>
+                    <td class="py-2 px-2"><input type="number" class="w-full p-1 border rounded item-quantity" value="1" min="1"></td>
+                    <td class="py-2 px-2"><input type="text" class="w-full p-1 border rounded item-sqft" value="0" disabled></td>
+                    <td class="py-2 px-2"><input type="number" class="w-full p-1 border rounded item-rate" value="0" min="0"></td>
+                    <td class="py-2 px-2 text-right font-semibold item-amount">₹0.00</td>
+                    <td class="py-2 px-2 no-print text-center"><button class="delete-item-btn text-red-500 hover:text-red-700" aria-label="Delete item"><svg class="w-5 h-5 inline-block" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm6 0a1 1 0 011 1v6a1 1 0 11-2 0V9a1 1 0 011-1z" clip-rule="evenodd"></path></svg></button></td>
+                `;
                 return row;
             };
 
             const calculateProductItemTotal = (row) => {
-                const thickness = parseFloat(row.querySelector('.item-thickness').value);
-                const length = parseFloat(row.querySelector('.item-length').value);
-                const breadth = parseFloat(row.querySelector('.item-breadth').value);
                 const qtySht = parseFloat(row.querySelector('.item-quantity').value);
                 const rate = parseFloat(row.querySelector('.item-rate').value);
-
-                const qtySqFt = qtySht * length * breadth;
-                row.querySelector('.item-sqft').value = isNaN(qtySqFt) ? '0' : qtySqFt.toFixed(2);
                 
+                let length = 0;
+                let breadth = 0;
+                
+                const productSelect = row.querySelector('.product-select');
+                if (productSelect && productSelect.value) {
+                    const productDimensions = productSelect.value.split('_');
+                    length = parseFloat(productDimensions[1]);
+                    breadth = parseFloat(productDimensions[2]);
+                } else {
+                    length = parseFloat(row.querySelector('.item-length').value);
+                    breadth = parseFloat(row.querySelector('.item-breadth').value);
+                }
+                
+                const qtySqFt = qtySht * (length * breadth);
+                row.querySelector('.item-sqft').value = isNaN(qtySqFt) ? '0' : qtySqFt.toFixed(2);
+
                 const amount = isNaN(qtySqFt) || isNaN(rate) ? 0 : qtySqFt * rate;
                 row.querySelector('.item-amount').textContent = `₹${amount.toFixed(2)}`;
             };
@@ -556,31 +607,111 @@
                 const grandTotal = productSubtotal + productTax + transportationSubtotal + transportationTax;
                 document.getElementById('grandTotalAmount').textContent = `₹${grandTotal.toFixed(2)}`;
             };
+            
+            // Auto Rate Population Logic from !DOCTYPE_2-5.html
+            const productMasterId = 'uploaded:product_master.csv';
+            let productRates = {};
+            const fetchCsvContent = async (id) => {
+                try {
+                    const response = await google.script.run
+                        .withSuccessHandler(content => {
+                            parseCsv(content);
+                            setupEventListeners();
+                        })
+                        .withFailureHandler(err => console.error('Error fetching CSV:', err))
+                        .fetchFileContent(id);
+                } catch (error) {
+                    console.error('Error in fetchFileContent API call:', error);
+                }
+            };
 
+            const parseCsv = (csvText) => {
+                const lines = csvText.trim().split('\n');
+                lines.shift(); // Remove header row
+                productRates = {};
+                lines.forEach(line => {
+                    const [thickness, length, breadth, rate] = line.split(',');
+                    const key = `${thickness}_${length}_${breadth}`;
+                    productRates[key] = parseFloat(rate);
+                });
+                initializeInvoice();
+            };
+
+            const setupEventListeners = () => {
+                invoiceItemsTableBody.addEventListener('change', (event) => {
+                    if (event.target.classList.contains('product-select')) {
+                        const row = event.target.closest('tr');
+                        const [thickness, length, breadth] = event.target.value.split('_');
+                        if (thickness && length && breadth) {
+                            populateRate(row, thickness, length, breadth);
+                        }
+                    }
+                });
+                invoiceItemsTableBody.addEventListener('input', (event) => {
+                    const target = event.target;
+                    const row = target.closest('tr');
+                    if (target.classList.contains('item-quantity') || target.classList.contains('item-rate')) {
+                        calculateProductItemTotal(row);
+                    }
+                    if (target.classList.contains('item-rate')) {
+                        const selectElement = row.querySelector('.product-select');
+                        if (selectElement) {
+                            selectElement.value = '';
+                        }
+                    }
+                    calculateTotals();
+                });
+            };
+
+            const populateRate = (row, thickness, length, breadth) => {
+                const rateKey = `${thickness}_${length}_${breadth}`;
+                const rate = productRates[rateKey];
+                const rateInput = row.querySelector('.item-rate');
+                const thicknessInput = row.querySelector('.item-thickness');
+                const lengthInput = row.querySelector('.item-length');
+                const breadthInput = row.querySelector('.item-breadth');
+                
+                if (rate !== undefined && rateInput) {
+                    rateInput.value = rate.toFixed(2);
+                    thicknessInput.value = thickness;
+                    lengthInput.value = length;
+                    breadthInput.value = breadth;
+                    calculateProductItemTotal(row);
+                } else {
+                    rateInput.value = '';
+                    thicknessInput.value = '';
+                    lengthInput.value = '';
+                    breadthInput.value = '';
+                }
+            };
+            
+            // Initializing the invoice
             const initializeInvoice = () => {
                 productItemCounter = 0;
                 transportationItemCounter = 0;
                 invoiceItemsTableBody.innerHTML = '';
                 transportationItemsTableBody.innerHTML = '';
                 
-                const initialProductRow = createItemRow(1, 'product');
+                const initialProductRow = createProductItemRow(1);
                 invoiceItemsTableBody.appendChild(initialProductRow);
                 productItemCounter = 1;
                 calculateTotals();
             };
 
-            initializeInvoice();
+            // Call the function to set up initial state
+            fetchCsvContent(productMasterId);
+
 
             addItemBtn.addEventListener('click', () => {
                 productItemCounter++;
-                const newRow = createItemRow(productItemCounter, 'product');
+                const newRow = createProductItemRow(productItemCounter);
                 invoiceItemsTableBody.appendChild(newRow);
                 calculateTotals();
             });
 
             addTransportationItemBtn.addEventListener('click', () => {
                 transportationItemCounter++;
-                const newRow = createItemRow(transportationItemCounter, 'transportation');
+                const newRow = createTransportationItemRow(transportationItemCounter);
                 transportationItemsTableBody.appendChild(newRow);
                 calculateTotals();
             });
@@ -588,24 +719,11 @@
             showTransportationBtn.addEventListener('click', () => {
                 transportationContainer.hidden = !transportationContainer.hidden;
                 if (!transportationContainer.hidden && transportationItemsTableBody.rows.length === 0) {
-                    const initialTransportationRow = createItemRow(1, 'transportation');
+                    const initialTransportationRow = createTransportationItemRow(1);
                     transportationItemsTableBody.appendChild(initialTransportationRow);
                     transportationItemCounter = 1;
                 }
                 calculateTotals();
-            });
-
-            invoiceItemsTableBody.addEventListener('input', (event) => {
-                const target = event.target;
-                const row = target.closest('tr');
-                if (row) {
-                    if (target.classList.contains('item-thickness') || target.classList.contains('item-length') ||
-                        target.classList.contains('item-breadth') || target.classList.contains('item-quantity') ||
-                        target.classList.contains('item-rate')) {
-                        calculateProductItemTotal(row);
-                        calculateTotals();
-                    }
-                }
             });
 
             transportationItemsTableBody.addEventListener('input', (event) => {
@@ -642,7 +760,6 @@
             document.getElementById('transportationGstSelect').addEventListener('change', calculateTotals);
         
             const upiId = '0112053000000000@KGB';
-            const grandTotalElement = document.getElementById('grandTotalAmount');
             const qrCodeDiv = document.getElementById('qrcode');
             
             new QRCode(qrCodeDiv, {
