@@ -271,32 +271,7 @@
                     </tr>
                 </thead>
                 <tbody id="invoiceItems">
-                    <tr>
-                        <td class="py-2 px-2" style="width: 6%;">1</td>
-                        <td class="py-2 px-2" style="width: 30%;">
-                            <select class="product-select w-full p-1 border rounded" aria-label="Product Particulars">
-                                <option value="">Select a Product</option>
-                                <option value="12_6_4">12mm x 6ft x 4ft</option>
-                                <option value="15_6_4">15mm x 6ft x 4ft</option>
-                                <option value="18_6_4">18mm x 6ft x 4ft</option>
-                                <option value="12_7_4">12mm x 7ft x 4ft</option>
-                                <option value="15_7_4">15mm x 7ft x 4ft</option>
-                                <option value="18_7_4">18mm x 7ft x 4ft</option>
-                                <option value="12_8_4">12mm x 8ft x 4ft</option>
-                                <option value="15_8_4">15mm x 8ft x 4ft</option>
-                                <option value="18_8_4">18mm x 8ft x 4ft</option>
-                            </select>
-                        </td>
-                        <td class="py-2 px-2" style="width: 8%;"><input type="number" class="w-full p-1 item-thickness" value="0" min="0" disabled></td>
-                        <td class="py-2 px-2" style="width: 7%;"><input type="number" class="w-full p-1 item-length" value="0" min="0" disabled></td>
-                        <td class="py-2 px-2" style="width: 7%;"><input type="number" class="w-full p-1 item-breadth" value="0" min="0" disabled></td>
-                        <td class="py-2 px-2" style="width: 9%;"><input type="number" class="w-full p-1 item-quantity" value="1" min="1"></td>
-                        <td class="py-2 px-2" style="width: 10%;"><input type="text" class="w-full p-1 item-sqft" value="0" disabled></td>
-                        <td class="py-2 px-2" style="width: 10%;"><input type="number" class="w-full p-1 item-rate" value="0" min="0"></td>
-                        <td class="py-2 px-2 text-right font-semibold item-amount">₹0.00</td>
-                        <td class="py-2 px-2 no-print text-center"><button class="delete-item-btn text-red-500 hover:text-red-700" aria-label="Delete item"><svg class="w-5 h-5 inline-block" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm6 0a1 1 0 011 1v6a1 1 0 11-2 0V9a1 1 0 011-1z" clip-rule="evenodd"></path></svg></button></td>
-                    </tr>
-                </tbody>
+                    </tbody>
                 <tfoot>
                     <tr class="no-print">
                         <td colspan="10" class="pt-4 pb-2 text-right add-remove-buttons">
@@ -484,6 +459,19 @@
 
             let productItemCounter = 0;
             let transportationItemCounter = 0;
+            
+            // Simulating product data that would be fetched from a CSV file
+            const productRates = {
+                '12_6_4': { thickness: 12, length: 6, breadth: 4, rate: 80.00 },
+                '15_6_4': { thickness: 15, length: 6, breadth: 4, rate: 95.00 },
+                '18_6_4': { thickness: 18, length: 6, breadth: 4, rate: 110.00 },
+                '12_7_4': { thickness: 12, length: 7, breadth: 4, rate: 85.00 },
+                '15_7_4': { thickness: 15, length: 7, breadth: 4, rate: 100.00 },
+                '18_7_4': { thickness: 18, length: 7, breadth: 4, rate: 120.00 },
+                '12_8_4': { thickness: 12, length: 8, breadth: 4, rate: 90.00 },
+                '15_8_4': { thickness: 15, length: 8, breadth: 4, rate: 105.00 },
+                '18_8_4': { thickness: 18, length: 8, breadth: 4, rate: 130.00 }
+            };
 
             const updateItemSerialNumbers = (tableBody) => {
                 const rows = tableBody.querySelectorAll('tr');
@@ -493,6 +481,18 @@
                     row.querySelector('td:first-child').textContent = counter;
                 });
                 return counter;
+            };
+
+            const createProductDropdownOptions = () => {
+                let optionsHtml = '<option value="">Select a Product</option>';
+                for (const key in productRates) {
+                    if (productRates.hasOwnProperty(key)) {
+                        const product = productRates[key];
+                        const displayName = `${product.thickness}mm x ${product.length}ft x ${product.breadth}ft`;
+                        optionsHtml += `<option value="${key}">${displayName}</option>`;
+                    }
+                }
+                return optionsHtml;
             };
 
             const createTransportationItemRow = (serialNumber) => {
@@ -517,16 +517,7 @@
                     <td class="py-2 px-2">${serialNumber}</td>
                     <td class="py-2 px-2">
                         <select class="product-select w-full p-1 border rounded" aria-label="Product Particulars">
-                            <option value="">Select a Product</option>
-                            <option value="12_6_4">12mm x 6ft x 4ft</option>
-                            <option value="15_6_4">15mm x 6ft x 4ft</option>
-                            <option value="18_6_4">18mm x 6ft x 4ft</option>
-                            <option value="12_7_4">12mm x 7ft x 4ft</option>
-                            <option value="15_7_4">15mm x 7ft x 4ft</option>
-                            <option value="18_7_4">18mm x 7ft x 4ft</option>
-                            <option value="12_8_4">12mm x 8ft x 4ft</option>
-                            <option value="15_8_4">15mm x 8ft x 4ft</option>
-                            <option value="18_8_4">18mm x 8ft x 4ft</option>
+                            ${createProductDropdownOptions()}
                         </select>
                     </td>
                     <td class="py-2 px-2"><input type="number" class="w-full p-1 border rounded item-thickness" value="0" min="0" disabled></td>
@@ -608,45 +599,46 @@
                 document.getElementById('grandTotalAmount').textContent = `₹${grandTotal.toFixed(2)}`;
             };
             
-            // Auto Rate Population Logic from !DOCTYPE_2-5.html
-            const productMasterId = 'uploaded:product_master.csv';
-            let productRates = {};
-            const fetchCsvContent = async (id) => {
-                try {
-                    const response = await google.script.run
-                        .withSuccessHandler(content => {
-                            parseCsv(content);
-                            setupEventListeners();
-                        })
-                        .withFailureHandler(err => console.error('Error fetching CSV:', err))
-                        .fetchFileContent(id);
-                } catch (error) {
-                    console.error('Error in fetchFileContent API call:', error);
+            const populateRate = (row, productKey) => {
+                const product = productRates[productKey];
+                const rateInput = row.querySelector('.item-rate');
+                const thicknessInput = row.querySelector('.item-thickness');
+                const lengthInput = row.querySelector('.item-length');
+                const breadthInput = row.querySelector('.item-breadth');
+                
+                if (product) {
+                    rateInput.value = product.rate.toFixed(2);
+                    thicknessInput.value = product.thickness;
+                    lengthInput.value = product.length;
+                    breadthInput.value = product.breadth;
+                    calculateProductItemTotal(row);
+                } else {
+                    rateInput.value = '';
+                    thicknessInput.value = '';
+                    lengthInput.value = '';
+                    breadthInput.value = '';
                 }
-            };
-
-            const parseCsv = (csvText) => {
-                const lines = csvText.trim().split('\n');
-                lines.shift(); // Remove header row
-                productRates = {};
-                lines.forEach(line => {
-                    const [thickness, length, breadth, rate] = line.split(',');
-                    const key = `${thickness}_${length}_${breadth}`;
-                    productRates[key] = parseFloat(rate);
-                });
-                initializeInvoice();
             };
 
             const setupEventListeners = () => {
                 invoiceItemsTableBody.addEventListener('change', (event) => {
                     if (event.target.classList.contains('product-select')) {
                         const row = event.target.closest('tr');
-                        const [thickness, length, breadth] = event.target.value.split('_');
-                        if (thickness && length && breadth) {
-                            populateRate(row, thickness, length, breadth);
+                        const selectedProductKey = event.target.value;
+                        if (selectedProductKey) {
+                            populateRate(row, selectedProductKey);
+                        } else {
+                            // If "Select a Product" is chosen, clear fields
+                            row.querySelector('.item-rate').value = '';
+                            row.querySelector('.item-thickness').value = '0';
+                            row.querySelector('.item-length').value = '0';
+                            row.querySelector('.item-breadth').value = '0';
+                            calculateProductItemTotal(row);
                         }
                     }
+                    calculateTotals();
                 });
+                
                 invoiceItemsTableBody.addEventListener('input', (event) => {
                     const target = event.target;
                     const row = target.closest('tr');
@@ -656,35 +648,13 @@
                     if (target.classList.contains('item-rate')) {
                         const selectElement = row.querySelector('.product-select');
                         if (selectElement) {
-                            selectElement.value = '';
+                            selectElement.value = ''; // Clear selected product if rate is manually changed
                         }
                     }
                     calculateTotals();
                 });
             };
 
-            const populateRate = (row, thickness, length, breadth) => {
-                const rateKey = `${thickness}_${length}_${breadth}`;
-                const rate = productRates[rateKey];
-                const rateInput = row.querySelector('.item-rate');
-                const thicknessInput = row.querySelector('.item-thickness');
-                const lengthInput = row.querySelector('.item-length');
-                const breadthInput = row.querySelector('.item-breadth');
-                
-                if (rate !== undefined && rateInput) {
-                    rateInput.value = rate.toFixed(2);
-                    thicknessInput.value = thickness;
-                    lengthInput.value = length;
-                    breadthInput.value = breadth;
-                    calculateProductItemTotal(row);
-                } else {
-                    rateInput.value = '';
-                    thicknessInput.value = '';
-                    lengthInput.value = '';
-                    breadthInput.value = '';
-                }
-            };
-            
             // Initializing the invoice
             const initializeInvoice = () => {
                 productItemCounter = 0;
@@ -695,11 +665,12 @@
                 const initialProductRow = createProductItemRow(1);
                 invoiceItemsTableBody.appendChild(initialProductRow);
                 productItemCounter = 1;
+                setupEventListeners();
                 calculateTotals();
             };
 
             // Call the function to set up initial state
-            fetchCsvContent(productMasterId);
+            initializeInvoice();
 
 
             addItemBtn.addEventListener('click', () => {
