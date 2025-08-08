@@ -130,7 +130,7 @@
             #thank-you-message-print {
                 display: block !important;
             }
-           
+
             /* Vertically shorten the green border in print */
             .bank-details-block, .terms-block {
                 height: auto; /* Allow height to be determined by content */
@@ -142,7 +142,6 @@
                 border-left-width: 4px;
                 border-color: #009a7b;
             }
-           
             /* Remove margins that cause extra spacing */
             .bank-details-block, .terms-block {
                 margin-bottom: 0 !important;
@@ -167,634 +166,445 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body class="bg-gray-50 text-gray-800 p-4">
-    <div id="message-box" class="message-box"></div>
 
-    <div class="invoice-container max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-2xl">
-        <header class="flex flex-col md:flex-row justify-between items-start border-b-2 border-primary-dark pb-6 mb-6">
-            <div class="w-full md:w-1/2 mb-6 md:mb-0 flex items-center">
-                <img src="https://www.cochinwood.in/web/image/8821-587dfee3/logo.png" alt="Cochin Wood Industries Logo" class="w-20 h-20 object-contain mr-6" onerror="this.onerror=null;this.src='https://placehold.co/80x80/004343/ffffff?text=CWI';">
-                <div class="flex-grow">
-                    <h2 class="text-lg font-bold text-primary-dark">Cochin Wood Industries Private Limited</h2>
-                    <address class="text-xs text-secondary-dark leading-snug">
-                        <p>Thoppilan Building, 146/A, Thuruthy, Kuruppampady,<br>Ernakulam, Kerala – 683545, India</p>
-                        <p class="mt-1">Phone: <span class="font-semibold">+91 9567410175</span> | E-Mail: <span class="font-semibold">info@cochinwood.in</span></p>
-                        <p class="mt-1">GSTIN: <span class="font-semibold">32AAJCC9689H1Z5</span></p>
-                    </address>
-                </div>
+    <div class="message-box" id="message-box"></div>
+
+    <div class="invoice-container bg-white shadow-lg mx-auto">
+        <header class="flex justify-between items-start mb-10">
+            <div class="w-2/5">
+                <img src="https://raw.githubusercontent.com/ganesh-gn/proforma-invoice/main/logo-placeholder.png" alt="Company Logo" class="w-32 mb-4" id="company-logo">
+                <h1 class="text-3xl font-bold text-primary-dark" contenteditable="true">YOUR COMPANY</h1>
+                <p contenteditable="true">123 Business Avenue, Suite 100, City, State, 500082</p>
+                <p><strong>GSTIN:</strong> <span contenteditable="true">29AAAAA0000A1Z5</span></p>
             </div>
-           
-            <div class="flex flex-col items-start md:items-end w-full md:w-1/2 mt-6 md:mt-0">
-                <h1 class="text-3xl font-extrabold text-primary-dark mb-4">PROFORMA INVOICE</h1>
-                <div class="w-full border-l-4 border-primary-accent pl-4 py-1 rounded-md text-sm">
-                    <div class="flex justify-between items-center mb-1"><strong class="font-bold text-primary-dark">P.I. No:</strong> <span id="invoiceNumber" contenteditable="true" class="text-right flex-grow font-semibold min-w-[120px]" aria-label="Proforma Invoice Number"></span></div>
-                    <div class="flex justify-between items-center mb-1"><strong class="font-bold text-primary-dark">Date:</strong> <input type="date" id="invoiceDate" class="w-auto text-right flex-grow text-xs"></div>
-                    <div class="flex justify-between items-center mb-1"><strong class="font-bold text-primary-dark">Valid Till:</strong> <input type="date" id="validTill" class="w-auto text-right flex-grow text-xs"></div>
-                    <div class="flex justify-between items-center"><strong class="font-bold text-primary-dark">Currency:</strong>
-                        <span id="currencyDisplay" class="w-auto text-xs bg-white text-right font-bold">INR (₹)</span>
-                    </div>
-                </div>
+            <div class="text-right">
+                <h2 class="text-4xl font-bold text-primary-accent">PROFORMA INVOICE</h2>
+                <p class="mt-2"><strong>Invoice #:</strong> <span contenteditable="true">PRO-2024-001</span></p>
+                <p><strong>Date:</strong> <span id="invoice-date"></span></p>
             </div>
         </header>
 
-        <section class="details-section mb-8 text-sm flex">
-            <div class="w-full md:w-5/12 pr-4 border-r-2 border-dashed border-secondary-dark">
-                <div class="customer-info w-full border-l-4 border-primary-accent pl-4 py-3 rounded-md">
-                    <strong class="block mb-2 text-base font-bold text-primary-dark">Customer Details:</strong>
-                    <div class="space-y-1 text-xs">
-                        <p class="flex items-center space-x-2"><span>Name:</span><span id="clientName" contenteditable="true" class="font-semibold flex-grow" aria-label="Customer Name"></span></p>
-                        <p class="flex items-center space-x-2"><span>Company:</span><span id="clientCompany" contenteditable="true" class="font-semibold flex-grow" aria-label="Customer Company"></span></p>
-                        <p class="flex items-center space-x-2"><span>GSTIN:</span><span id="clientGSTIN" contenteditable="true" class="font-semibold flex-grow" aria-label="Customer GSTIN"></span></p>
-                    </div>
-                </div>
+        <section class="customer-info grid grid-cols-2 gap-10 mb-10">
+            <div>
+                <h3 class="font-bold text-lg text-primary-dark mb-2">Bill To:</h3>
+                <p><span contenteditable="true" class="font-semibold">Customer Name</span></p>
+                <address contenteditable="true">
+                    123 Client Street<br>
+                    Client City, State, 500032
+                </address>
+                <p><strong>GSTIN:</strong> <span contenteditable="true">27AAAAA0000A1Z5</span></p>
+                <p><strong>State:</strong>
+                    <select class="address-select" onchange="updateStateCode(this, 'billing-state-code')">
+                        <option value="">Select State</option>
+                    </select>
+                    (<span id="billing-state-code"></span>)
+                </p>
             </div>
-       
-            <div class="w-full md:w-7/12 flex pl-4">
-                <div class="w-full md:w-1/2 pr-4 border-r-2 border-dashed border-secondary-dark">
-                    <div class="billing-info w-full border-l-4 border-primary-accent pl-4 py-3 rounded-md">
-                        <strong class="block mb-2 text-base font-bold text-primary-dark">Billing Address:</strong>
-                        <div class="space-y-1 text-xs">
-                            <p class="flex items-center space-x-2"><span>Address:</span><span id="billingAddressLine" contenteditable="true" class="font-semibold flex-grow" aria-label="Billing Address"></span></p>
-                            <p class="flex items-center space-x-2"><span>District:</span>
-                                <select id="billingDistrictSelect" class="bg-transparent border-none p-0 inline-block w-auto font-semibold flex-grow address-select" disabled>
-                                    <option value="">Select District</option>
-                                </select>
-                            </p>
-                            <p class="flex items-center space-x-2"><span>State/UT:</span>
-                                <select id="billingStateSelect" class="bg-transparent border-none p-0 inline-block w-auto font-semibold flex-grow address-select">
-                                    <option value="">Select State/UT</option>
-                                </select>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-       
-                <div class="w-full md:w-1/2 pl-4 flex flex-col justify-start">
-                    <div class="shipping-info w-full border-l-4 border-primary-accent pl-4 py-3 rounded-md">
-                        <strong class="block mb-2 text-base font-bold text-primary-dark">Shipping Address:</strong>
-                        <div class="space-y-1 text-xs">
-                            <p class="flex items-center space-x-2"><span>Address:</span><span id="shippingAddressLine" contenteditable="true" class="font-semibold flex-grow" aria-label="Shipping Address"></span></p>
-                            <p class="flex items-center space-x-2"><span>District:</span>
-                                <select id="shippingDistrictSelect" class="bg-transparent border-none p-0 inline-block w-auto font-semibold flex-grow address-select" disabled>
-                                    <option value="">Select District</option>
-                                </select>
-                            </p>
-                            <p class="flex items-center space-x-2"><span>State/UT:</span>
-                                <select id="shippingStateSelect" class="bg-transparent border-none p-0 inline-block w-auto font-semibold flex-grow address-select">
-                                    <option value="">Select State/UT</option>
-                                </select>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="flex justify-start mt-2 ml-4">
-                        <button id="copyAddressBtn" class="no-print bg-gray-200 text-gray-700 text-xs font-semibold py-1 px-2 rounded-md shadow-sm hover:bg-gray-300 transition-colors">
-                            Copy from Billing
-                        </button>
-                    </div>
-                </div>
+            <div class="text-right">
+                <h3 class="font-bold text-lg text-primary-dark mb-2">Ship To:</h3>
+                <p><span contenteditable="true" class="font-semibold">Recipient Name</span></p>
+                <address contenteditable="true">
+                    456 Recipient Drive<br>
+                    Recipient City, State, 500084
+                </address>
+                 <p><strong>State:</strong>
+                    <select class="address-select" onchange="updateStateCode(this, 'shipping-state-code')">
+                        <option value="">Select State</option>
+                    </select>
+                    (<span id="shipping-state-code"></span>)
+                </p>
             </div>
         </section>
 
-        <main>
-            <table class="w-full border-collapse mb-6 bg-gray-50 text-sm rounded-lg overflow-hidden shadow-sm">
-                <thead class="bg-primary-dark text-white text-left">
-                    <tr>
-                        <th scope="col" class="py-3 px-2 font-bold w-[5%]">S.No</th>
-                        <th scope="col" class="py-3 px-2 font-bold w-[30%]">Particulars</th>
-                        <th scope="col" class="py-3 px-2 font-bold w-[10%]">Thk(mm)</th>
-                        <th scope="col" class="py-3 px-2 font-bold w-[10%]">Len(ft)</th>
-                        <th scope="col" class="py-3 px-2 font-bold w-[10%]">Brd(ft)</th>
-                        <th scope="col" class="py-3 px-2 font-bold w-[10%]">Qty(Sht)</th>
-                        <th scope="col" class="py-3 px-2 font-bold w-[10%]">Qty(SqFt)</th>
-                        <th scope="col" class="py-3 px-2 font-bold w-[10%]">Rate/SqFt</th>
-                        <th scope="col" class="py-3 px-2 font-bold w-[15%] text-right">Amount</th>
-                        <th scope="col" class="py-3 px-2 w-[5%] no-print"></th>
+        <section>
+            <table class="w-full text-left table-auto border-collapse">
+                <thead>
+                    <tr class="bg-primary-dark text-white">
+                        <th class="p-3">#</th>
+                        <th class="p-3 w-2/5">Particulars</th>
+                        <th class="p-3">HSN/SAC</th>
+                        <th class="p-3">Qty</th>
+                        <th class="p-3">Rate</th>
+                        <th class="p-3">Amount</th>
+                        <th class="no-print p-3"></th>
                     </tr>
                 </thead>
-                <tbody id="invoiceItems">
+                <tbody id="invoice-items">
                     </tbody>
                 <tfoot>
-                    <tr class="no-print">
-                        <td colspan="10" class="pt-4 pb-2 text-right add-remove-buttons">
-                            <button id="addItemBtn" class="w-8 h-8 flex items-center justify-center bg-secondary-accent hover:bg-primary-dark text-white font-bold rounded-full shadow-md transition-transform hover:scale-110" aria-label="Add new item row">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                            </button>
-                        </td>
+                    <tr>
+                        <td colspan="4" class="border-t-2 border-gray-200"></td>
+                        <td class="p-2 border-t-2 border-gray-200 font-semibold">Subtotal</td>
+                        <td id="subtotal" class="p-2 border-t-2 border-gray-200 text-right">0.00</td>
+                        <td class="no-print border-t-2 border-gray-200"></td>
+                    </tr>
+                    <tr class="print-hide-if-empty">
+                        <td colspan="4"></td>
+                        <td class="p-2 font-semibold">Discount (%) <input type="number" id="discount-percent" class="w-16 ml-2" min="0" value="0"></td>
+                        <td id="discount-amount" class="p-2 text-right">0.00</td>
+                         <td class="no-print"></td>
+                    </tr>
+                    <tr class="print-hide-if-empty hidden-for-print">
+                        <td colspan="4"></td>
+                        <td class="p-2 font-semibold">Taxable Amount</td>
+                        <td id="taxable-amount" class="p-2 text-right">0.00</td>
+                         <td class="no-print"></td>
+                    </tr>
+                    <tr class="print-hide-if-empty">
+                        <td colspan="4"></td>
+                        <td class="p-2 font-semibold">CGST (%) <input type="number" id="cgst-percent" class="w-16 ml-2" min="0" value="9"></td>
+                        <td id="cgst-amount" class="p-2 text-right">0.00</td>
+                         <td class="no-print"></td>
+                    </tr>
+                    <tr class="print-hide-if-empty">
+                        <td colspan="4"></td>
+                        <td class="p-2 font-semibold">SGST (%) <input type="number" id="sgst-percent" class="w-16 ml-2" min="0" value="9"></td>
+                        <td id="sgst-amount" class="p-2 text-right">0.00</td>
+                         <td class="no-print"></td>
+                    </tr>
+                    <tr class="print-hide-if-empty">
+                        <td colspan="4"></td>
+                        <td class="p-2 font-semibold">IGST (%) <input type="number" id="igst-percent" class="w-16 ml-2" min="0" value="0"></td>
+                        <td id="igst-amount" class="p-2 text-right">0.00</td>
+                         <td class="no-print"></td>
+                    </tr>
+                     <tr class="print-hide-if-empty">
+                        <td colspan="4"></td>
+                        <td class="p-2 font-semibold">TCS (%) <input type="number" id="tcs-percent" class="w-16 ml-2" min="0" value="1"></td>
+                        <td id="tcs-amount" class="p-2 text-right">0.00</td>
+                         <td class="no-print"></td>
                     </tr>
                     <tr class="bg-gray-100">
-                        <td colspan="8" class="text-right font-bold py-2 px-2">Subtotal</td>
-                        <td id="productSubtotal" class="text-right font-bold py-2 px-2">₹0.00</td>
-                        <td class="no-print"></td>
-                    </tr>
-                    <tr class="bg-gray-100">
-                        <td colspan="8" class="pt-2 pr-4 text-right">
-                            <span class="font-bold">GST</span>
-                            <select id="productGstSelect" class="bg-transparent border border-gray-300 rounded-md p-1 ml-2 no-print">
-                                <option value="0.001">Supply to Merchant Exporter (0.1%)</option>
-                                <option value="0.05">5%</option>
-                                <option value="0.12">12%</option>
-                                <option value="0.18" selected>18%</option>
-                                <option value="0.28">28%</option>
-                            </select>
-                        </td>
-                        <td id="productTax" class="text-right font-bold py-2 px-2">₹0.00</td>
+                        <td colspan="4"></td>
+                        <td class="p-3 font-bold text-primary-dark">Grand Total</td>
+                        <td id="grand-total" class="p-3 text-right font-bold text-primary-dark">0.00</td>
                         <td class="no-print"></td>
                     </tr>
                 </tfoot>
             </table>
+            <div class="add-remove-buttons mt-4 no-print">
+                <button onclick="addItem()" class="bg-primary-accent text-white px-4 py-2 rounded hover:bg-secondary-accent transition-colors">Add Item</button>
+            </div>
+            <p class="mt-4"><strong>Amount in words:</strong> <span id="amount-in-words" class="font-semibold"></span></p>
+        </section>
 
-            <div id="transportationContainer" hidden>
-                <table class="w-full border-collapse mb-6 bg-gray-50 text-sm rounded-lg overflow-hidden shadow-sm" id="transportation-table">
-                    <thead class="bg-primary-dark text-white text-left">
-                        <tr>
-                            <th scope="col" class="py-3 px-2 font-bold w-[5%]">Sl No.</th>
-                            <th scope="col" class="py-3 px-2 font-bold w-[30%]">Destination</th>
-                            <th scope="col" class="py-3 px-2 font-bold w-[15%]">Distance(km)</th>
-                            <th scope="col" class="py-3 px-2 font-bold w-[15%]">Weight(Tonne)</th>
-                            <th scope="col" class="py-3 px-2 font-bold w-[15%]">Rate/Tonne</th>
-                            <th scope="col" class="py-3 px-2 font-bold w-[15%] text-right">Amount</th>
-                            <th scope="col" class="py-3 px-2 w-[5%] no-print"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="transportationItems">
-                        </tbody>
-                    <tfoot>
-                         <tr class="no-print">
-                            <td colspan="7" class="pt-4 pb-2 text-right add-remove-buttons">
-                                <button id="addTransportationItemBtn" class="w-8 h-8 flex items-center justify-center bg-secondary-accent hover:bg-primary-dark text-white font-bold rounded-full shadow-md transition-transform hover:scale-110" aria-label="Add new item row">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                            </button>
-                            </td>
-                        </tr>
-                        <tr class="bg-gray-100">
-                            <td colspan="5" class="text-right font-bold py-2 px-2">Subtotal</td>
-                            <td id="transportationSubtotal" class="text-right font-bold py-2 px-2">₹0.00</td>
-                            <td class="no-print"></td>
-                        </tr>
-                        <tr class="bg-gray-100">
-                            <td colspan="5" class="pt-2 pr-4 text-right">
-                                <span class="font-bold">GST</span>
-                                <select id="transportationGstSelect" class="bg-transparent border border-gray-300 rounded-md p-1 ml-2 no-print">
-                                    <option value="0.001">Supply to Merchant Exporter (0.1%)</option>
-                                    <option value="0.05">5%</option>
-                                    <option value="0.12">12%</option>
-                                    <option value="0.18" selected>18%</option>
-                                    <option value="0.28">28%</option>
-                                </select>
-                            </td>
-                            <td id="transportationTax" class="text-right font-bold py-2 px-2">₹0.00</td>
-                            <td class="no-print"></td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-
-            <div class="no-print mt-6 text-left">
-                <button id="showTransportationBtn" class="bg-gray-200 text-gray-700 text-sm font-semibold py-1 px-3 rounded-md shadow-sm hover:bg-gray-300 transition-colors">
-                    Add Transportation
-                </button>
-            </div>
-           
-            <div class="flex justify-end mt-8">
-                <div class="w-full md:w-1/2">
-                    <table class="w-full text-sm">
-                        <tr class="text-lg font-extrabold">
-                            <td class="border-t-2 border-primary-dark pt-4 pr-4 text-right">Grand Total</td>
-                            <td id="grandTotalAmount" class="border-t-2 border-primary-dark pt-4 pr-2 text-right">₹0.00</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </main>
-       
-        <div class="signatures-below-table mt-8 flex justify-between">
-            <div class="w-5/12 text-center pt-3 text-sm">
-                Prepared by<br>
-                <span id="preparedBy" contenteditable="true" class="font-bold border-t border-primary-dark pt-2 block min-w-[100px] mt-2" aria-label="Prepared by name"></span>
-            </div>
-            <div class="w-5/12 text-center pt-3 text-sm">
-                Sales Manager<br>
-                <span id="salesManager" contenteditable="true" class="font-bold border-t border-primary-dark pt-2 block min-w-[100px] mt-2" aria-label="Sales Manager name"></span>
-            </div>
-        </div>
-
-        <div id="terms-and-footer-page" class="w-full flex flex-col justify-start">
-            <div class="flex flex-col md:flex-row flex-grow justify-between gap-8">
-                <div class="w-full md:w-1/3 flex flex-col justify-start bank-details-block">
-                    <div class="border-l-4 border-primary-accent pl-4 py-3 rounded-md bank-details-content">
-                        <strong class="block mb-4 text-base font-bold text-primary-dark">Bank Details:</strong>
-                        <address class="text-xs leading-relaxed space-y-1">
-                            <p><span class="font-semibold">A/C Name:</span> <span class="font-semibold">Cochin Wood Industries Pvt Ltd</span></p>
-                            <p><span class="font-semibold">A/C No:</span> <span class="font-semibold">074305002785</span></p>
-                            <p><span class="font-semibold">Bank:</span> <span class="font-semibold">ICICI Bank, Perumbavoor</span></p>
-                            <p><span class="font-semibold">IFSC:</span> <span class="font-semibold">ICIC0000743</span></p>
-                        </address>
-                        <div class="mt-4 flex flex-col items-center">
-                           <p class="text-sm break-all text-center"><strong>UPI ID:</strong><br><span class="font-bold">cochinwoodindustriesprivatelimited.ibz@icici</span></p>
-                           <div id="qrcode" class="w-28 h-28 no-print self-center mt-2"></div>
-                           <p class="text-sm font-semibold mt-1">Scan & Pay</p>
-                        </div>
+        <div id="terms-and-footer-page">
+            <div class="grid grid-cols-2 gap-10">
+                <div class="bank-details-block">
+                    <h3 class="font-bold text-lg text-primary-dark mb-2">Bank Details:</h3>
+                    <div class="bank-details-content border-l-4 border-primary-accent pl-4">
+                        <p><strong>Bank Name:</strong> <span contenteditable="true">Example Bank</span></p>
+                        <p><strong>Account Name:</strong> <span contenteditable="true">Your Company Inc.</span></p>
+                        <p><strong>Account Number:</strong> <span contenteditable="true">1234567890</span></p>
+                        <p><strong>IFSC Code:</strong> <span contenteditable="true">EXBK0001234</span></p>
+                        <p><strong>Branch:</strong> <span contenteditable="true">Main Branch, City</span></p>
                     </div>
                 </div>
 
-                <div class="w-full md:w-2/3 terms-block">
-                    <div class="border-l-4 border-primary-accent pl-4 py-3 rounded-md terms-content">
-                        <strong class="block mb-4 text-base font-bold text-primary-dark">Terms & Conditions:</strong>
-                        <ol class="list-decimal pl-4 mt-2 text-xs space-y-1 leading-normal terms-list">
-                            <li><b>Price Validity</b>: This proforma invoice is valid for 15 days from the invoice date.</li>
-                            <li><b>Payment Terms</b>: A 50% advance payment is required upon order confirmation. The remaining balance is due prior to dispatch.</li>
-                            <li><b>Delivery & Shipping</b>: Delivery is estimated at 7-15 days. Shipping charges are extra and the risk of loss or damage transfers to the buyer upon handover to the transporter.</li>
-                            <li><b>Quality & Inspection</b>: Goods must be inspected upon receipt. Any defects or discrepancies should be reported within 5 days.</li>
-                            <li><b>Warranty</b>: Our products are covered by a point of sale warranty.</li>
-                            <li><b>Limitation of Liability</b>: Our liability is limited to the value of the goods purchased. We are not liable for any indirect or consequential damages.</li>
-                            <li><b>Confidentiality</b>: All information related to this transaction is to be kept confidential.</li>
-                            <li><b>Loading Tolerance</b>: A loading tolerance of +/-5% is applicable.</li>
-                            <li><b>Jurisdiction</b>: This invoice is governed by Indian laws. Any disputes shall be subject to the exclusive jurisdiction of the courts in Perumbavoor.</li>
-                            <li><b>Force Majeure</b>: We are not responsible for delays caused by unforeseen events, including but not limited to natural disasters, pandemics, or government actions.</li>
-                            <li id="orderSpecificTandC_li" class="print-hide-if-empty"><b>Order-Specific Terms</b>: <span id="orderSpecificTandC" contenteditable="true" class="font-semibold" aria-label="Order specific terms and conditions">N/A</span></li>
-                        </ol>
-                        <div class="mt-2">
-                            <strong class="block mb-2 text-sm font-bold text-primary-dark">Incoterms:</strong>
-                            <select id="incoterms" class="w-full text-xs bg-gray-50 border border-gray-300 rounded-md p-1">
-                                <option value="EXW" selected><strong>Ex Works (EXW)</strong></option>
-                                <option value="FCA">Free Carrier (FCA)</option>
-                                <option value="DAP">Delivered at Place (DAP)</option>
-                            </select>
-                        </div>
-                    </div>
+                <div class="text-center">
+                    <h3 class="font-bold text-lg text-primary-dark mb-2">Scan to Pay</h3>
+                    <div id="qrcode" class="flex justify-center"></div>
                 </div>
             </div>
-            <div class="mt-8 pt-4 text-center border-t-2 border-primary-dark" id="thank-you-message-print">
-                <p class="text-lg font-bold text-primary-dark">Thank you for your business!</p>
+
+            <div class="terms-block mt-10">
+                <h3 class="font-bold text-lg text-primary-dark mb-2">Terms & Conditions:</h3>
+                <div class="terms-content border-l-4 border-primary-accent pl-4 text-xs">
+                    <ol class="list-decimal list-inside" contenteditable="true">
+                        <li>Payment: 50% advance, 50% on delivery.</li>
+                        <li>Delivery: Within 14 working days of receiving the advance payment.</li>
+                        <li>Validity: This proforma invoice is valid for 30 days.</li>
+                        <li>Taxes: All applicable taxes are extra as per actuals.</li>
+                        <li>Jurisdiction: All disputes are subject to City jurisdiction.</li>
+                    </ol>
+                </div>
             </div>
+            
+            <footer class="footer-content text-center mt-10 pt-5 border-t-2 border-primary-accent">
+                <p class="font-semibold">Thank you for your business!</p>
+                <p class="text-sm">This is a computer-generated proforma invoice and does not require a signature.</p>
+                <div id="thank-you-message-print" class="hidden font-bold mt-4">Thank You!</div>
+            </footer>
         </div>
     </div>
-   
-    <datalist id="product-list">
-        <option value="Marine Plywood - BWP Grade"></option>
-        <option value="BWP Laminated Plywood"></option>
-        <option value="Commercial Plywood"></option>
-        <option value="Blockboard - BWR Grade"></option>
-        <option value="MDF Board"></option>
-        <option value="Particle Board"></option>
-    </datalist>
 
-    <div class="no-print mt-6 text-center">
-        <button id="saveToSheetBtn" class="bg-secondary-accent text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-primary-dark transition-colors">
-            Save to Google Sheet
-        </button>
-        <button id="printBtn" class="bg-gray-500 text-white font-bold py-2 px-4 ml-4 rounded-lg shadow-md hover:bg-gray-700 transition-colors" onclick="window.print();">
-            Print Invoice
-        </button>
-    </div>
-
+    <template id="item-row-template">
+        <tr class="item-row border-b border-gray-200">
+            <td class="p-2 item-sr"></td>
+            <td class="p-2">
+                <select class="w-full particulars">
+                    <option>Select a product</option>
+                    </select>
+            </td>
+            <td class="p-2"><input type="text" class="w-full hsn-sac"></td>
+            <td class="p-2"><input type="number" class="w-20 qty" value="1" min="0"></td>
+            <td class="p-2"><input type="number" class="w-24 rate" value="0.00" min="0"></td>
+            <td class="p-2 text-right amount">0.00</td>
+            <td class="no-print p-2">
+                <button onclick="deleteItem(this)" class="delete-item-btn text-red-500 hover:text-red-700">&times;</button>
+            </td>
+        </tr>
+    </template>
+    
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const invoiceItems = document.getElementById('invoiceItems');
-            const addItemBtn = document.getElementById('addItemBtn');
-            const transportationContainer = document.getElementById('transportationContainer');
-            const transportationItems = document.getElementById('transportationItems');
-            const showTransportationBtn = document.getElementById('showTransportationBtn');
-            const addTransportationItemBtn = document.getElementById('addTransportationItemBtn');
-           
-            const productSubtotalElem = document.getElementById('productSubtotal');
-            const productTaxElem = document.getElementById('productTax');
-            const transportationSubtotalElem = document.getElementById('transportationSubtotal');
-            const transportationTaxElem = document.getElementById('transportationTax');
-            const grandTotalAmountElem = document.getElementById('grandTotalAmount');
-            const productGstSelect = document.getElementById('productGstSelect');
-            const transportationGstSelect = document.getElementById('transportationGstSelect');
-           
-            const invoiceNumberSpan = document.getElementById('invoiceNumber');
-            const invoiceDateInput = document.getElementById('invoiceDate');
-            const validTillInput = document.getElementById('validTill');
-           
-            const billingAddressLine = document.getElementById('billingAddressLine');
-            const billingStateSelect = document.getElementById('billingStateSelect');
-            const billingDistrictSelect = document.getElementById('billingDistrictSelect');
+        // State data with codes
+        const states = [
+            { name: "Andhra Pradesh", code: "37" }, { name: "Arunachal Pradesh", code: "12" }, { name: "Assam", code: "18" },
+            { name: "Bihar", code: "10" }, { name: "Chhattisgarh", code: "22" }, { name: "Goa", code: "30" },
+            { name: "Gujarat", code: "24" }, { name: "Haryana", code: "06" }, { name: "Himachal Pradesh", code: "02" },
+            { name: "Jharkhand", code: "20" }, { name: "Karnataka", code: "29" }, { name: "Kerala", code: "32" },
+            { name: "Madhya Pradesh", code: "23" }, { name: "Maharashtra", code: "27" }, { name: "Manipur", code: "14" },
+            { name: "Meghalaya", code: "17" }, { name: "Mizoram", code: "15" }, { name: "Nagaland", code: "13" },
+            { name: "Odisha", code: "21" }, { name: "Punjab", code: "03" }, { name: "Rajasthan", code: "08" },
+            { name: "Sikkim", code: "11" }, { name: "Tamil Nadu", code: "33" }, { name: "Telangana", code: "36" },
+            { name: "Tripura", code: "16" }, { name: "Uttar Pradesh", code: "09" }, { name: "Uttarakhand", code: "05" },
+            { name: "West Bengal", code: "19" }, { name: "Andaman and Nicobar Islands", code: "35" }, { name:g: "Chandigarh", code: "04" },
+            { name: "Dadra and Nagar Haveli and Daman and Diu", code: "26" }, { name: "Delhi", code: "07" },
+            { name: "Jammu and Kashmir", code: "01" }, { name: "Ladakh", code: "38" }, { name: "Lakshadweep", code: "31" },
+            { name: "Puducherry", code: "34" }
+        ];
 
-            const shippingAddressLine = document.getElementById('shippingAddressLine');
-            const shippingStateSelect = document.getElementById('shippingStateSelect');
-            const shippingDistrictSelect = document.getElementById('shippingDistrictSelect');
-            const copyAddressBtn = document.getElementById('copyAddressBtn');
-           
-            const messageBox = document.getElementById('message-box');
-
-            // Function to pad a number with a leading zero if it's a single digit
-            const pad = (num) => (num < 10 ? '0' : '') + num;
-
-            // Set today's date
-            const today = new Date();
-            const d = today.getDate();
-            const m = today.getMonth() + 1; // Month is 0-indexed
-            const y = today.getFullYear();
-            const formattedDate = `${y}-${pad(m)}-${pad(d)}`;
-            invoiceDateInput.value = formattedDate;
-
-            // Set Valid Till date (15 days from today)
-            const validTillDate = new Date();
-            validTillDate.setDate(today.getDate() + 15);
-            const validD = validTillDate.getDate();
-            const validM = validTillDate.getMonth() + 1;
-            const validY = validTillDate.getFullYear();
-            const formattedValidTill = `${validY}-${pad(validM)}-${pad(validD)}`;
-            validTillInput.value = formattedValidTill;
-
-            // Generate PI Number (placeholder with current date)
-            const piNumber = `PI-CWI-${pad(d)}${pad(m)}${y.toString().substr(-2)}-001`;
-            invoiceNumberSpan.textContent = piNumber;
-
-            // Generate QR code for UPI ID
-            const upiId = 'cochinwoodindustriesprivatelimited.ibz@icici';
-            const qrCodeData = `upi://pay?pa=${upiId}&pn=Cochin%20Wood%20Industries%20Pvt%20Ltd&cu=INR`;
-            new QRCode(document.getElementById('qrcode'), {
-                text: qrCodeData,
-                width: 128,
-                height: 128,
-                colorDark : "#004343",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
-           
-            const showMessage = (message, duration = 3000) => {
-                messageBox.textContent = message;
-                messageBox.style.display = 'block';
-                setTimeout(() => {
-                    messageBox.style.display = 'none';
-                }, duration);
-            };
-
-            // Function to format numbers as currency
-            const formatCurrency = (amount) => {
-                return `₹${parseFloat(amount).toFixed(2)}`;
-            };
-
-            // Function to update all totals
-            const updateTotals = () => {
-                const productGstRate = parseFloat(productGstSelect.value);
-                const transportationGstRate = parseFloat(transportationGstSelect.value);
-
-                // Product Totals
-                let productSubtotal = 0;
-                document.querySelectorAll('#invoiceItems .item-row').forEach(row => {
-                    const amountText = row.querySelector('.item-amount').textContent;
-                    productSubtotal += parseFloat(amountText) || 0;
-                });
-                const productTax = productSubtotal * productGstRate;
-                productSubtotalElem.textContent = formatCurrency(productSubtotal);
-                productTaxElem.textContent = formatCurrency(productTax);
-
-                // Transportation Totals
-                let transportationSubtotal = 0;
-                if (!transportationContainer.hidden) {
-                    document.querySelectorAll('#transportationItems .item-row').forEach(row => {
-                        const amountText = row.querySelector('.item-amount').textContent;
-                        transportationSubtotal += parseFloat(amountText) || 0;
-                    });
-                }
-                const transportationTax = transportationSubtotal * transportationGstRate;
-                transportationSubtotalElem.textContent = formatCurrency(transportationSubtotal);
-                transportationTaxElem.textContent = formatCurrency(transportationTax);
-               
-                // Grand Total
-                const grandTotal = productSubtotal + productTax + transportationSubtotal + transportationTax;
-                grandTotalAmountElem.textContent = formatCurrency(grandTotal);
-            };
-
-            // Listen for changes in the GST dropdowns
-            productGstSelect.addEventListener('change', updateTotals);
-            transportationGstSelect.addEventListener('change', updateTotals);
-
-            // Function to create a new product item row
-            const createItemRow = (sno) => {
-                const tr = document.createElement('tr');
-                tr.className = 'item-row text-center';
-                tr.innerHTML = `
-                    <td class="border-t py-2 px-2 text-left">${sno}</td>
-                    <td class="border-t py-2 px-2"><input type="text" list="product-list" class="item-particulars w-full bg-transparent border-none p-0" aria-label="Particulars"></td>
-                    <td class="border-t py-2 px-2"><input type="number" step="0.01" class="item-thk w-full bg-transparent border-none p-0 text-center"></td>
-                    <td class="border-t py-2 px-2"><input type="number" step="0.01" class="item-len w-full bg-transparent border-none p-0 text-center"></td>
-                    <td class="border-t py-2 px-2"><input type="number" step="0.01" class="item-brd w-full bg-transparent border-none p-0 text-center"></td>
-                    <td class="border-t py-2 px-2"><input type="number" step="1" class="item-qty w-full bg-transparent border-none p-0 text-center"></td>
-                    <td class="item-sqft border-t py-2 px-2 text-right">0.00</td>
-                    <td class="border-t py-2 px-2"><input type="number" step="0.01" class="item-rate w-full bg-transparent border-none p-0 text-center"></td>
-                    <td class="item-amount border-t py-2 px-2 text-right">0.00</td>
-                    <td class="border-t no-print text-center">
-                        <button class="remove-item-btn w-6 h-6 flex items-center justify-center text-white bg-red-500 hover:bg-red-700 rounded-full transition-colors" aria-label="Remove item">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
-                        </button>
-                    </td>
-                `;
-
-                const inputs = tr.querySelectorAll('.item-thk, .item-len, .item-brd, .item-qty, .item-rate');
-                inputs.forEach(input => {
-                    input.addEventListener('input', () => {
-                        const thk = parseFloat(tr.querySelector('.item-thk').value) || 0;
-                        const len = parseFloat(tr.querySelector('.item-len').value) || 0;
-                        const brd = parseFloat(tr.querySelector('.item-brd').value) || 0;
-                        const qty = parseFloat(tr.querySelector('.item-qty').value) || 0;
-                        const rate = parseFloat(tr.querySelector('.item-rate').value) || 0;
-
-                        const sqft = len * brd * qty;
-                        const amount = sqft * rate;
-                       
-                        tr.querySelector('.item-sqft').textContent = sqft.toFixed(2);
-                        tr.querySelector('.item-amount').textContent = amount.toFixed(2);
-                        updateTotals();
-                    });
-                });
-
-                tr.querySelector('.remove-item-btn').addEventListener('click', () => {
-                    if (invoiceItems.children.length > 1) {
-                        tr.remove();
-                        updateSno('invoiceItems');
-                        updateTotals();
-                    } else {
-                        showMessage("You must have at least one product item on the invoice.");
-                    }
-                });
-
-                return tr;
-            };
-
-            // Function to create a new transportation item row
-            const createTransportationRow = (sno) => {
-                const tr = document.createElement('tr');
-                tr.className = 'item-row text-center';
-                tr.innerHTML = `
-                    <td class="border-t py-2 px-2 text-left">${sno}</td>
-                    <td class="border-t py-2 px-2"><input type="text" class="item-destination w-full bg-transparent border-none p-0" aria-label="Destination"></td>
-                    <td class="border-t py-2 px-2"><input type="number" step="0.01" class="item-distance w-full bg-transparent border-none p-0 text-center"></td>
-                    <td class="border-t py-2 px-2"><input type="number" step="0.01" class="item-weight w-full bg-transparent border-none p-0 text-center"></td>
-                    <td class="border-t py-2 px-2"><input type="number" step="0.01" class="item-rate w-full bg-transparent border-none p-0 text-center"></td>
-                    <td class="item-amount border-t py-2 px-2 text-right">0.00</td>
-                    <td class="border-t no-print text-center">
-                        <button class="remove-item-btn w-6 h-6 flex items-center justify-center text-white bg-red-500 hover:bg-red-700 rounded-full transition-colors" aria-label="Remove item">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
-                        </button>
-                    </td>
-                `;
-
-                const inputs = tr.querySelectorAll('.item-distance, .item-weight, .item-rate');
-                inputs.forEach(input => {
-                    input.addEventListener('input', () => {
-                        const distance = parseFloat(tr.querySelector('.item-distance').value) || 0;
-                        const weight = parseFloat(tr.querySelector('.item-weight').value) || 0;
-                        const rate = parseFloat(tr.querySelector('.item-rate').value) || 0;
-                       
-                        const amount = weight * rate;
-                       
-                        tr.querySelector('.item-amount').textContent = amount.toFixed(2);
-                        updateTotals();
-                    });
-                });
-
-                tr.querySelector('.remove-item-btn').addEventListener('click', () => {
-                    if (transportationItems.children.length > 1) {
-                        tr.remove();
-                        updateSno('transportationItems');
-                        updateTotals();
-                    } else {
-                        // If only one row is left, clicking remove hides the entire section and button
-                        transportationItems.innerHTML = '';
-                        transportationContainer.hidden = true;
-                        showTransportationBtn.style.display = 'block';
-                        updateTotals();
-                    }
-                });
-                return tr;
-            };
-
-            // Function to update serial numbers for a given table
-            const updateSno = (tableId) => {
-                const table = document.getElementById(tableId);
-                const rows = table.querySelectorAll('.item-row');
-                rows.forEach((row, index) => {
-                    row.querySelector('td:first-child').textContent = index + 1;
-                });
-            };
-
-            // Add an initial empty row for products
-            const initialProductRow = createItemRow(1);
-            invoiceItems.appendChild(initialProductRow);
-           
-            // Event listener to show transportation section
-            showTransportationBtn.addEventListener('click', () => {
-                transportationContainer.hidden = false;
-                showTransportationBtn.style.display = 'none';
-                if (transportationItems.children.length === 0) {
-                    const initialTransportationRow = createTransportationRow(1);
-                    transportationItems.appendChild(initialTransportationRow);
-                }
-                updateTotals(); // Re-calculate totals to include transportation
-            });
-           
-            // Event listener for adding new product items
-            addItemBtn.addEventListener('click', () => {
-                const newSno = invoiceItems.children.length + 1;
-                const newRow = createItemRow(newSno);
-                invoiceItems.appendChild(newRow);
-                updateSno('invoiceItems');
-            });
-           
-            // Event listener for adding new transportation items
-            addTransportationItemBtn.addEventListener('click', () => {
-                const newSno = transportationItems.children.length + 1;
-                const newRow = createTransportationRow(newSno);
-                transportationItems.appendChild(newRow);
-                updateSno('transportationItems');
-            });
-
-            // Initial calculation
-            updateTotals();
-           
-            // State and District Data
-            const statesAndDistricts = {
-                "Andhra Pradesh": ["Anantapur","Chittoor","East Godavari","Guntur","Krishna","Kurnool","Prakasam","Srikakulam","Sri Potti Sriramulu Nellore","Visakhapatnam","Vizianagaram","West Godavari","Y.S.R. Kadapa"],
-                "Arunachal Pradesh": ["Tawang","West Kameng","East Kameng","Papum Pare","Kurung Kumey","Kra Daadi","Lower Subansiri","Upper Subansiri","West Siang","East Siang","Siang","Upper Siang","Lower Siang","Changlang","Tirap","Longding","Namsai","Anjaw","Lower Dibang Valley","Dibang Valley"],
-                "Assam": ["Baksa","Barpeta","Biswanath","Bongaigaon","Cachar","Charaideo","Chirang","Darrang","Dhemaji","Dhubri","Dibrugarh","Dima Hasao","Goalpara","Golaghat","Hailakandi","Hojai","Jorhat","Kamrup Metropolitan","Kamrup","Karbi Anglong","Karimganj","Kokrajhar","Lakhimpur","Majuli","Morigaon","Nagaon","Nalbari","Sivasagar","Sonitpur","South Salmara-Mankachar","Tinsukia","Udalguri","West Karbi Anglong"],
-                "Bihar": ["Araria","Arwal","Aurangabad","Banka","Begusarai","Bhagalpur","Bhojpur","Buxar","Darbhanga","East Champaran","Gaya","Gopalganj","Jamui","Jehanabad","Kaimur","Katihar","Khagaria","Kishanganj","Lakhisarai","Madhepura","Madhubani","Munger","Muzaffarpur","Nalanda","Nawada","Patna","Purnia","Rohtas","Saharsa","Samastipur","Saran","Sheikhpura","Sheohar","Sitamarhi","Siwan","Supaul","Vaishali","West Champaran"],
-                "Chhattisgarh": ["Balod","Baloda Bazar","Balrampur","Bastar","Bemetara","Bijapur","Bilaspur","Dantewada","Dhamtari","Durg","Gariaband","Gaurela Pendra Marwahi","Janjgir Champa","Jashpur","Kabirdham","Kanker","Kondagaon","Korba","Koriya","Mahasamund","Mungeli","Narayanpur","Raigarh","Raipur","Rajnandgaon","Sukma","Surajpur","Surguja"],
-                "Goa": ["North Goa","South Goa"],
-                "Gujarat": ["Ahmedabad","Amreli","Anand","Aravalli","Banaskantha","Bharuch","Bhavnagar","Botad","Chhota Udaipur","Dahod","Dang","Devbhoomi Dwarka","Gandhinagar","Gir Somnath","Jamnagar","Junagadh","Kheda","Kutch","Mahisagar","Mehsarana","Morbi","Narmada","Navsari","Panchmahal","Patna","Porbandar","Rajkot","Sabarkantha","Surat","Surendranagar","Tapi","Vadodara","Valsad"],
-                "Haryana": ["Ambala","Bhiwani","Charkhi Dadri","Faridabad","Fatehabad","Gurugram","Hisar","Jhajjar","Jind","Kaithal","Karnal","Kurukshetra","Mahendragarh","Nuh","Palwal","Panchkula","Panipat","Rewari","Rohtak","Sirsa","Sonipat","Yamunanagar"],
-                "Himachal Pradesh": ["Bilaspur","Chamba","Hamirpur","Kangra","Kinnaur","Kullu","Lahaul and Spiti","Mandi","Shimla","Sirmaur","Solan","Una"],
-                "Jharkhand": ["Bokaro","Chatra","Deoghar","Dhanbad","Dumka","East Singhbhum","Garhwa","Giridih","Godda","Gumla","Hazaribagh","Jamtara","Khunti","Koderma","Latehar","Lohardaga","Pakur","Palamu","Ramgarh","Ranchi","Sahebganj","Seraikela Kharsawan","Simdega","West Singhbhum"],
-                "Karnataka": ["Bagalkot","Ballari","Belagavi","Bengaluru Rural","Bengaluru Urban","Bidar","Chamarajanagar","Chikkaballapur","Chikkamagaluru","Chitradurga","Dakshina Kannada","Davanagere","Dharwad","Gadag","Hassan","Haveri","Kalaburagi","Kodagu","Kolar","Koppal","Mandya","Mysuru","Raichur","Ramanagara","Shivamogga","Tumakuru","Udupi","Uttara Kannada","Vijayapura","Yadgir"],
-                "Kerala": ["Alappuzha","Ernakulam","Idukku","Kannur","Kasaragod","Kollam","Kottayam","Kozhikode","Malappuram","Palakkad","Pathanamthitta","Thiruvananthapuram","Thrissur","Wayanad"],
-                "Madhya Pradesh": ["Agar Malwa","Alirajpur","Anuppur","Ashoknagar","Balaghat","Barwani","Betul","Bhind","Bhopal","Burhanpur","Chhatarpur","Chhindwara","Damoh","Datia","Dewas","Dhar","Dindori","Guna","Gwalior","Harda","Hoshangabad","Indore","Jabalpur","Jhabua","Katni","Khandwa","Khargone","Mandla","Mandsaur","Morena","Narsinghpur","Neemuch","Niwari","Panna","Raisen","Rajgarh","Ratlam","Rewa","Sagar","Satna","Sehore","Seoni","Shahdol","Shajapur","Sheopur","Shivpuri","Sidhi","Singrauli","Tikamgarh","Ujjain","Umaria","Vidisha"],
-                "Maharashtra": ["Ahmednagar","Akola","Amravati","Aurangabad","Beed","Bhandara","Buldhana","Chandrapur","Dhule","Gadchiroli","Gondia","Hingoli","Jalgaon","Jalna","Kolhapur","Latur","Mumbai City","Mumbai Suburban","Nagpur","Nanded","Nandurbar","Nashik","Osmanabad","Palghar","Parbhani","Pune","Raigad","Ratnagiri","Sangli","Satara","Sindhudurg","Solapur","Thane","Wardha","Washim","Yavatmal"],
-                "Manipur": ["Bishnupur","Chandel","Churachandpur","Imphal East","Imphal West","Jiribam","Kakching","Kamjong","Kangpokpi","Noney","Pherzawl","Senapati","Tamenglong","Tengnoupal","Thoubal","Ukhrul"],
-                "Meghalaya": ["East Garo Hills","East Jaintia Hills","East Khasi Hills","North Garo Hills","Ri-Bhoi","South Garo Hills","South West Garo Hills","South West Khasi Hills","West Garo Hills","West Jaintia Hills","West Khasi Hills"],
-                "Mizoram": ["Aizawl","Champhai","Hnahthial","Khawzawl","Kolasib","Lawngtlai","Lunglei","Mamit","Saiha","Serchhip","Saitual"],
-                "Nagaland": ["Dimapur","Kiphire","Kohima","Longleng","Mokokchung","Mon","Peren","Phek","Wokha","Zunheboto","Tuensang"],
-                "Odisha": ["Angul","Balangir","Balasore","Bargarh","Bhadrak","Boudh","Cuttack","Deogarh","Dhenkanal","Gajapati","Ganjam","Jagatsinghpur","Jajpur","Jharsuguda","Kalahandi","Kandhamal","Kendrapara","Kendujhar","Khordha","Koraput","Malkangiri","Mayurbhanj","Nabarangpur","Nayagarh","Nuapada","Puri","Rayagada","Sambalpur","Subarnapur","Sundargarh"],
-                "Punjab": ["Amritsar","Barnala","Bathinda","Faridkot","Fatehgarh Sahib","Fazilka","Ferozepur","Gurdaspur","Hoshiarpur","Jalandhar","Kapurthala","Ludhiana","Mansa","Moga","Muktsar","Pathankot","Patiala","Rupnagar","Sahibzada Ajit Singh Nagar","Sangrur","Shahid Bhagat Singh Nagar","Tarn Taran"],
-                "Rajasthan": ["Ajmer","Alwar","Banswara","Baran","Barmer","Bharatpur","Bhilwara","Bikaner","Bundi","Chittorgarh","Churu","Dausa","Dholpur","Dungarpur","Hanumangarh","Jaipur","Jaisalmer","Jalore","Jhalawar","Jhunjhunu","Jodhpur","Karauli","Kota","Nagaur","Pali","Pratapgarh","Rajsamand","Sawai Madhopur","Sikar","Sirohi","Sri Ganganagar","Tonk","Udaipur"],
-                "Sikkim": ["East Sikkim","North Sikkim","South Sikkim","West Sikkim"],
-                "Tamil Nadu": ["Ariyalur","Chengalpattu","Chennai","Coimbatore","Cuddalore","Dharmapuri","Dindigul","Erode","Kallakurichi","Kanchipuram","Kanyakumari","Karur","Krishnagiri","Madurai","Mayiladuthurai","Nagapattinam","Namakkal","Nilgiris","Perambalur","Pudukkottai","Ramanathapuram","Ranipet","Salem","Sivaganga","Tenkasi","Thanjavur","Theni","Thoothukudi","Tiruchirappalli","Tirunelveli","Tirupathur","Tiruppur","Tiruvallur","Tiruvannamalai","Tiruvarur","Vellore","Viluppuram","Virudhunagar"],
-                "Telangana": ["Adilabad","Bhadradri Kothagudem","Hyderabad","Jagtial","Jangaon","Jayashankar Bhupalpally","Jogulamba Gadwal","Kamareddy","Karimnagar","Khammam","Komaram Bheem","Mahabubabad","Mahabubnagar","Mancherial","Medak","Medchal–Malkajgiri","Nagarkurnool","Nalgonda","Narayanpet","Nirmal","Nizamabad","Peddapalli","Rajanna Sircilla","Ranga Reddy","Sangareddy","Siddipet","Suryapet","Vikarabad","Wanaparthy","Warangal Rural","Warangal Urban","Yadadri Bhuvanagiri"],
-                "Tripura": ["Dhalai","Gomati","Khowai","North Tripura","Sepahijala","South Tripura","Unakoti","West Tripura"],
-                "Uttar Pradesh": ["Agra","Aligarh","Allahabad","Ambedkar Nagar","Amethi","Amroha","Auraiya","Azamgarh","Badaun","Bagpat","Bahraich","Balarampur","Banda","Barabanki","Bareilly","Basti","Bijnor","Bulandshahr","Chandauli","Chitrakoot","Deoria","Etah","Etawah","Faizabad","Farrukhabad","Fatehpur","Firozabad","Gautam Buddha Nagar","Ghaziabad","Ghazipur","Gonda","Gorakhpur","Hamirpur","Hapur","Hardoi","Hathras","Jalaun","Jaunpur","Jhansi","Kannauj","Kanpur Dehat","Kanpur Nagar","Kasganj","Kaushambi","Kheri","Kushinagar","Lakhimpur Kheri","Lalitpur","Lucknow","Maharajganj","Mahoba","Mainpuri","Mathura","Mau","Meerut","Mirzapur","Moradabad","Muzaffarnagar","Pilibhit","Pratapgarh","Raebareli","Rampur","Saharanpur","Sambhal","Sant Kabir Nagar","Sant Ravidas Nagar","Shahjahanpur","Shamli","Shravasti","Siddharthnagar","Sitapur","Sonbhadra","Sultanpur","Unnao","Varanasi"],
-                "Uttarakhand": ["Almora","Bageshwar","Chamoli","Champawat","Dehradun","Haridwar","Nainital","Pauri Garhwal","Pithoragarh","Rudraprayag","Tehri Garhwal","Udham Singh Nagar","Uttarkashi"],
-                "West Bengal": ["Alipurduar","Bankura","Birbhum","Cooch Behar","Dakshin Dinajpur","Darjeeling","Hooghly","Howrah","Jalpaiguri","Jhargram","Kalimpong","Kolkata","Malda","Murshidabad","Nadia","North 24 Parganas","Paschim Bardhaman","Paschim Medinipur","Purba Bardhaman","Purba Medinipur","Purulia","South 24 Parganas","Uttar Dinajpur"],
-                "Andaman and Nicobar Islands": ["Nicobar","North and Middle Andaman","South Andaman"],
-                "Chandigarh": ["Chandigarh"],
-                "Dadra and Nagar Haveli and Daman and Diu": ["Dadra and Nagar Haveli","Daman","Diu"],
-                "Delhi": ["Central Delhi","East Delhi","New Delhi","North Delhi","North East Delhi","North West Delhi","Shahdara","South Delhi","South East Delhi","South West Delhi","West Delhi"],
-                "Jammu and Kashmir": ["Anantnag","Bandipora","Baramulla","Budgam","Doda","Ganderbal","Jammu","Kathua","Kishtwar","Kulgam","Kupwara","Poonch","Pulwama","Rajouri","Ramban","Reasi","Samba","Shopian","Srinagar","Udhampur"],
-                "Ladakh": ["Kargil","Leh"],
-                "Lakshadweep": ["Lakshadweep"],
-                "Puducherry": ["Karaikal","Mahe","Puducherry","Yanam"]
-            };
-
-            // Function to populate a state dropdown
-            const populateStates = (selectElement) => {
-                for (const state in statesAndDistricts) {
+        // Function to populate state dropdowns
+        function populateStates() {
+            const stateDropdowns = document.querySelectorAll('.address-select');
+            stateDropdowns.forEach(dropdown => {
+                states.forEach(state => {
                     const option = document.createElement('option');
-                    option.value = state;
-                    option.textContent = state;
-                    selectElement.appendChild(option);
-                }
-            };
+                    option.value = state.code;
+                    option.textContent = state.name;
+                    dropdown.appendChild(option);
+                });
+            });
+        }
+        
+        function updateStateCode(selectElement, codeElementId) {
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            document.getElementById(codeElementId).textContent = selectedOption.value || 'N/A';
+            updateCalculations(); // Recalculate taxes on state change
+        }
 
-            // Function to populate a district dropdown
-            const populateDistricts = (stateSelectElement, districtSelectElement) => {
-                const selectedState = stateSelectElement.value;
-                districtSelectElement.innerHTML = '<option value="">Select District</option>';
-                districtSelectElement.disabled = true;
+        // Function to set the current date
+        function setCurrentDate() {
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const year = today.getFullYear();
+            document.getElementById('invoice-date').textContent = `${day}/${month}/${year}`;
+        }
 
-                if (selectedState) {
-                    const districts = statesAndDistricts[selectedState];
-                    districts.forEach(district => {
-                        const option = document.createElement('option');
-                        option.value = district;
-                        option.textContent = district;
-                        districtSelectElement.appendChild(option);
-                    });
-                    districtSelectElement.disabled = false;
-                }
-            };
-           
-            // Populate state dropdowns initially
-            populateStates(billingStateSelect);
-            populateStates(shippingStateSelect);
+        // Function to add a new item row
+        function addItem() {
+            const template = document.getElementById('item-row-template');
+            const clone = template.content.cloneNode(true);
+            const newRow = clone.querySelector('tr');
+            document.getElementById('invoice-items').appendChild(newRow);
+            updateSerialNumbers();
+            attachRowEventListeners(newRow); // Attach listeners to the new row
+            populateParticulars(newRow.querySelector('.particulars')); // Populate dropdown for the new row
+        }
 
-            // Handle state changes for billing and shipping addresses
-            billingStateSelect.addEventListener('change', () => populateDistricts(billingStateSelect, billingDistrictSelect));
-            shippingStateSelect.addEventListener('change', () => populateDistricts(shippingStateSelect, shippingDistrictSelect));
-           
-            // Functionality for "Copy from Billing" button
-            copyAddressBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                // Copy values
-                shippingAddressLine.textContent = billingAddressLine.textContent;
-                shippingStateSelect.value = billingStateSelect.value;
-               
-                // Trigger district population for shipping address and select the copied district
-                populateDistricts(shippingStateSelect, shippingDistrictSelect);
-                setTimeout(() => { // Use a slight delay to ensure the options are populated
-                    shippingDistrictSelect.value = billingDistrictSelect.value;
-                }, 50);
+        // Function to delete an item row
+        function deleteItem(button) {
+            const row = button.closest('tr');
+            row.remove();
+            updateSerialNumbers();
+            updateCalculations();
+        }
+
+        // Function to update serial numbers
+        function updateSerialNumbers() {
+            const rows = document.querySelectorAll('#invoice-items .item-row');
+            rows.forEach((row, index) => {
+                row.querySelector('.item-sr').textContent = index + 1;
+            });
+        }
+
+        // Function to handle calculations
+        function updateCalculations() {
+            let subtotal = 0;
+            const rows = document.querySelectorAll('#invoice-items .item-row');
+            rows.forEach(row => {
+                const qty = parseFloat(row.querySelector('.qty').value) || 0;
+                const rate = parseFloat(row.querySelector('.rate').value) || 0;
+                const amount = qty * rate;
+                row.querySelector('.amount').textContent = amount.toFixed(2);
+                subtotal += amount;
+            });
+
+            document.getElementById('subtotal').textContent = subtotal.toFixed(2);
+            
+            const discountPercent = parseFloat(document.getElementById('discount-percent').value) || 0;
+            const discountAmount = subtotal * (discountPercent / 100);
+            document.getElementById('discount-amount').textContent = `-${discountAmount.toFixed(2)}`;
+
+            const taxableAmount = subtotal - discountAmount;
+            document.getElementById('taxable-amount').textContent = taxableAmount.toFixed(2);
+
+            // Check if billing and shipping states are the same
+            const billingStateCode = document.getElementById('billing-state-code').textContent;
+            const shippingStateCode = document.getElementById('shipping-state-code').textContent;
+            
+            let cgstAmount = 0, sgstAmount = 0, igstAmount = 0;
+            
+            if (billingStateCode && shippingStateCode && billingStateCode === shippingStateCode) {
+                // Apply CGST & SGST
+                const cgstPercent = parseFloat(document.getElementById('cgst-percent').value) || 0;
+                const sgstPercent = parseFloat(document.getElementById('sgst-percent').value) || 0;
+                cgstAmount = taxableAmount * (cgstPercent / 100);
+                sgstAmount = taxableAmount * (sgstPercent / 100);
+                document.getElementById('igst-percent').value = 0; // Reset IGST
+            } else {
+                // Apply IGST
+                const igstPercent = parseFloat(document.getElementById('igst-percent').value) || 0;
+                igstAmount = taxableAmount * (igstPercent / 100);
+                document.getElementById('cgst-percent').value = 0; // Reset CGST
+                document.getElementById('sgst-percent').value = 0; // Reset SGST
+            }
+
+            document.getElementById('cgst-amount').textContent = cgstAmount.toFixed(2);
+            document.getElementById('sgst-amount').textContent = sgstAmount.toFixed(2);
+            document.getElementById('igst-amount').textContent = igstAmount.toFixed(2);
+            
+            const tcsPercent = parseFloat(document.getElementById('tcs-percent').value) || 0;
+            const totalTax = cgstAmount + sgstAmount + igstAmount;
+            const tcsAmount = (taxableAmount + totalTax) * (tcsPercent / 100);
+            document.getElementById('tcs-amount').textContent = tcsAmount.toFixed(2);
+
+            const grandTotal = taxableAmount + totalTax + tcsAmount;
+            document.getElementById('grand-total').textContent = grandTotal.toFixed(2);
+            document.getElementById('amount-in-words').textContent = numberToWords(grandTotal);
+
+            // Hide/show tax rows based on values
+            toggleTaxVisibility('cgst', cgstAmount);
+            toggleTaxVisibility('sgst', sgstAmount);
+            toggleTaxVisibility('igst', igstAmount);
+            toggleTaxVisibility('tcs', tcsAmount);
+            toggleTaxVisibility('discount', discountAmount);
+        }
+        
+        function toggleTaxVisibility(taxName, amount) {
+            const row = document.getElementById(`${taxName}-amount`).closest('tr');
+            if (amount === 0) {
+                row.classList.add('hidden-for-print');
+            } else {
+                row.classList.remove('hidden-for-print');
+            }
+        }
+        
+        function attachRowEventListeners(row) {
+            row.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', updateCalculations);
+            });
+        }
+        
+        // Function to convert number to words
+        function numberToWords(num) {
+            const a = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+            const b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+            
+            if ((num = num.toString()).length > 9) return 'overflow';
+            const n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+            if (!n) return;
+            let str = '';
+            str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + ' crore ' : '';
+            str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + ' lakh ' : '';
+            str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + ' thousand ' : '';
+            str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + ' hundred ' : '';
+            str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) : '';
+            
+            // Handle paise part
+            const parts = num.split('.');
+            if (parts.length > 1 && parseInt(parts[1]) > 0) {
+                const paise = parts[1].slice(0, 2);
+                str += ' and ' + numberToWords(paise) + ' paise';
+            }
+            
+            return str.trim().split(/\s+/).map(s => s.charAt(0).toUpperCase() + s.substring(1)).join(' ');
+        }
+        
+        // Function to generate QR code
+        function generateQRCode() {
+            const companyName = "YOUR COMPANY"; // Replace with dynamic value if needed
+            const upiId = "your-upi-id@okhdfcbank"; // Replace with your UPI ID
+            const grandTotal = document.getElementById('grand-total').textContent;
+            
+            if(grandTotal && parseFloat(grandTotal) > 0) {
+                const upiString = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(companyName)}&am=${grandTotal}&cu=INR`;
+                document.getElementById('qrcode').innerHTML = ""; // Clear previous QR
+                new QRCode(document.getElementById("qrcode"), {
+                    text: upiString,
+                    width: 128,
+                    height: 128
+                });
+            }
+        }
+        
+        let productNames = [];
+
+        async function fetchAndPopulateProducts() {
+            try {
+                const response = await fetch('product_master.csv');
+                const data = await response.text();
+                const rows = data.split('\n').slice(1); // Skip header row
+                const names = rows.map(row => row.split(',')[0].trim()).filter(name => name);
+                productNames = [...new Set(names)]; // Get unique names
+                
+                // Populate initial dropdowns
+                document.querySelectorAll('.particulars').forEach(populateParticulars);
+
+            } catch (error) {
+                console.error('Error fetching or parsing CSV:', error);
+                showMessage('Could not load product list.', 'error');
+            }
+        }
+
+        function populateParticulars(selectElement) {
+            if (!selectElement) return;
+            // Clear existing options except the first one
+            while (selectElement.options.length > 1) {
+                selectElement.remove(1);
+            }
+            // Add new options
+            productNames.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                selectElement.appendChild(option);
+            });
+        }
+        
+        // Function to show a message to the user
+        function showMessage(message, type = 'success') {
+            const box = document.getElementById('message-box');
+            box.textContent = message;
+            box.style.backgroundColor = type === 'error' ? '#c0392b' : '#004343';
+            box.style.display = 'block';
+            setTimeout(() => {
+                box.style.display = 'none';
+            }, 3000);
+        }
+
+        // Initial setup on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            setCurrentDate();
+            populateStates();
+            addItem(); // Add one item row by default
+            fetchAndPopulateProducts();
+            
+            // Attach event listeners for tax and discount inputs
+            document.getElementById('discount-percent').addEventListener('input', updateCalculations);
+            document.getElementById('cgst-percent').addEventListener('input', updateCalculations);
+            document.getElementById('sgst-percent').addEventListener('input', updateCalculations);
+            document.getElementById('igst-percent').addEventListener('input', updateCalculations);
+            document.getElementById('tcs-percent').addEventListener('input', updateCalculations);
+            
+            // Initial calculation
+            updateCalculations();
+            
+            // Generate QR code on load and on update
+            generateQRCode();
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', generateQRCode);
             });
         });
     </script>
